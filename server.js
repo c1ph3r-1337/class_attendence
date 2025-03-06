@@ -195,7 +195,7 @@ app.post("/cr-login", (req, res) => {
     <div class="container">
       <h1>Invalid Credentials</h1>
       <p class="text-center text-muted">The username or password you entered is incorrect.</p>
-      <a href="/cr.html" class="btn">Try Again</a>
+      <div style="text-align: center;"><a href="/cr.html" class="btn">Try Again</a></div>
     </div>
   </body>
   </html>
