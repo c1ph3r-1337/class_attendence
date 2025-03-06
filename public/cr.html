@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CR Login & Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .cr-login-card, .cr-dashboard {
+      max-width: 500px;
+      width: 90%;
+      margin: 50px auto;
+      padding: 40px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    .cr-dashboard {
+      max-width: 800px;
+    }
+    .cr-login-card h1, .cr-dashboard h1 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .download-btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .download-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .back-link:hover {
+      color: var(--primary-dark);
+    }
+  </style>
+</head>
+<body>
+  <div id="crContainer"></div>
+  <script>
+    // Render the CR login form
+    function showCrLogin() {
+      const crHTML = `
+        <div class="cr-login-card" id="crLoginCard" style="text-align: center;">
+          <h1>CR Login</h1>
+          <form id="crLoginForm" action="#" method="post">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required placeholder="Enter CR username">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required placeholder="Enter password">
+            <button type="submit">Login as CR</button>
+          </form>
+          <a href="/" class="back-link">Back to Student Login</a>
+        </div>`;
+      document.getElementById('crContainer').innerHTML = crHTML;
+      
+      // On submit, prevent default and send credentials via fetch
+      document.getElementById('crLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = this.elements.username.value;
+        const password = this.elements.password.value;
+        
+        // Submit credentials to the server
+        fetch('/cr-login', {
+          method: 'POST',
+          body: new URLSearchParams({ username, password })
+        })
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('crContainer').innerHTML = html;
+        })
+        .catch(error => {
+          console.error('Error fetching CR dashboard:', error);
+          document.getElementById('crContainer').innerHTML = `<p>Error loading dashboard.</p>`;
+        });
+      });
+    }
+    
+    showCrLogin();
+  </script>
+</body>
+</html>
